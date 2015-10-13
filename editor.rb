@@ -74,18 +74,9 @@ class SelectList < NCObj
 		
 		@items.length.times do |i|
 			idx = i + 1
-			yy = @y + idx * @inline
-			#行間隔をあける
-			@inline.times do |i|
-				Curses.setpos(yy + i + 1 , @x)
-				Curses.addstr("|")
-				Curses.setpos(yy + i + 1 , @x + 3)
-				Curses.setpos(yy + i + 1, @x + @max_len + 5)
-				Curses.addstr("|")
-			end
-			Curses.setpos(yy , @x)
+			Curses.setpos(@y + idx , @x)
 			Curses.addstr("|")
-			Curses.setpos(yy , @x + 3)
+			Curses.setpos(@y + idx , @x + 3)
 			#選択された行の場合色を変える
 			if i == @select	then
 				Curses.attron(Curses::A_REVERSE)	#反転属性を追加
@@ -94,20 +85,12 @@ class SelectList < NCObj
 			else
 				Curses.addstr(@items[i].get["name"])
 			end
-			Curses.setpos(yy, @x + @max_len + 5)
+			Curses.setpos(@y + idx, @x + @max_len + 5)
 			Curses.addstr("|")
-			#行間隔をあける
-			@inline.times do |i|
-				Curses.setpos(yy + i + 1 , @x)
-				Curses.addstr("|")
-				Curses.setpos(yy + i + 1 , @x + 3)
-				Curses.setpos(yy + i + 1, @x + @max_len + 5)
-				Curses.addstr("|")
-			end
-			y += @inline 
+			y += 1 
 		end
 		
-		Curses.setpos(y + @inline,@x)
+		Curses.setpos(y + 1,@x)
 		#枠の上を表示
 		Curses.addstr("+--")
 		
