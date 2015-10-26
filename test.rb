@@ -1,4 +1,6 @@
 require './AAmodule'
 include AA
 
-AA.output('./output',false)
+a = AA::Campus.new
+a.load('./hello.AE')
+a.write('./out',true)
