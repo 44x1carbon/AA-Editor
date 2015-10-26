@@ -22,7 +22,7 @@ module AA
 		return objs
 	end
 	
-	def output(filepath,overwrite)
+	def output(campus,filepath,overwrite)
 		#テストコード
 		#chars = loadAA('./hello.AE')
 		filepath << '.AE'
@@ -33,7 +33,7 @@ module AA
 		end
 		
 		f = File.open(filepath,'w')
-		chars.each{|char|
+		campus.each{|char|
 			out = {}
 			if char['char'].match(/^[ -~｡-ﾟ]+$/) == nil then
 				out['char'] = String.new
