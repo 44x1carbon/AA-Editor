@@ -5,3 +5,4 @@ p h[:abc],h[:def]
 
 p h.fetch(:abc)
 p h.fetch(:def)
+p "hello"
