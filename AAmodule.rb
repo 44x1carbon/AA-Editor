@@ -1,4 +1,4 @@
-module AA
+module AAEditer
 	class Campus
 		def load(filepath) 
 			objs = []
@@ -28,6 +28,7 @@ module AA
 			end
 
 			if @campus.nil? then
+				#エラーを起こす
 				return -1
 			end
 			
