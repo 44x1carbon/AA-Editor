@@ -63,7 +63,11 @@ module AA
 
 			}
 		end
-			
+		
+		def input(obj)
+			search(obj[y],obj[x])
+		end
+		
 		def search(y,x)
 			@campus.each_with_index{|char,idx|
 				if char['y'] == y && char['x'] == x then
@@ -98,5 +102,7 @@ module AA
 				end
 			}
 		end
+		
+		attr_accessor :campus	
 	end
 end
