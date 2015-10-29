@@ -1,5 +1,3 @@
-require 'nkf'
-
 module AA
 	class Campus
 		def load(filepath) 
@@ -24,12 +22,8 @@ module AA
 		end
 	
 		def write(filepath,overwrite)
-			#テストコード
-			#chars = loadAA('./hello.AE')
 			filepath << '.AE'
 			if File.exist?(filepath) && !overwrite then
-				#ファイルが存在している時
-				#上書きするかの確認をする
 				return -1
 			end
 
@@ -68,8 +62,41 @@ module AA
 				f.puts out['char'] << out['back'] << out['font'] << out['y'] << out['x']
 
 			}
-		end	
+		end
+			
+		def search(y,x)
+			@campus.each_with_index{|char,idx|
+				if char['y'] == y && char['x'] == x then
+					return @campus[idx]
+				end
+			}
+			return -1
+		end
 
+		def pop(y,x)
+			@campus.each_with_index{|char,idx|
+				if char['y'] == y && char['x'] == x then
+					@campus.delete_at(idx)
+				end
+			}
+		end
+
+		def sort() #y,xの値の小さい順にソートする
+			@campus.sort{|a,b|
+				a['y'] <=> b['y']
+			}
+			@campus.each_index{|idx|
+				a = @campus[idx]
+				if a == @campus.last then 
+					break
+				end
+				b = @campus[idx + 1]
+				if a['y'] >= b['y'] && a['x'] < b['x'] then
+					work = a
+					a = b
+					b = work
+				end
+			}
+		end
 	end
 end
-
