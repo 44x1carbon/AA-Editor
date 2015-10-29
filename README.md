@@ -12,13 +12,6 @@
 |H|BLACK|BLUE|0|0|
 
 ## Colorコード
-|色|コード|
-|:-:|:-:|
-|BLACK|0|
-|BLUE|1|
-|CYAN|2|
-|GREEN|3|
-|MAGENTA|4|
-|RED|5|
-|WHITE|6|
-|YELLOW|7|
+|色|Black|Blue|Cyan|Green|Margenta|Red|White|Yellow|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|コード|0|1|2|3|4|5|6|7|
