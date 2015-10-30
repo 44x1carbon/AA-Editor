@@ -1,4 +1,4 @@
-module AAEditer
+module Campus
 	class Campus
 		def load(filepath) 
 			objs = []
@@ -65,8 +65,17 @@ module AAEditer
 			}
 		end
 		
-		def input(obj)
-			search(obj[y],obj[x])
+		def input(char,back,font,y,x)
+			target = search(y,x)
+			if target == -1 then 
+				obj = {'char'=>char,'back'=>back,'font'=>font,'y'=>y,'x'=>x}
+				@campus.push(obj)
+				sort()
+			else
+				target['char'] = char
+				target['back'] = back
+				target['font'] = font
+			end
 		end
 		
 		def search(y,x)
