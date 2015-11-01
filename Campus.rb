@@ -1,7 +1,7 @@
 module Campus
 	class Campus
 		def load(filepath) 
-			objs = []
+			@data = {}
 			keylist = ["char","back","font","y","x"]
 			f = File.open(filepath,mode = "r")
 			f.each{|line| 
@@ -15,10 +15,14 @@ module Campus
 						obj[keylist[idx]] = a.hex
 					end
 				}
-				objs.push(obj)
+				if @data[obj["y"]] == nil then
+					@data[obj["y"]] = []
+					@data[obj["y"]].push(obj)
+				else
+					@data[obj["y"]].push(obj)
+				end
 			}
 			f.close
-			@campus = objs
 		end
 	
 		def write(filepath,overwrite)
@@ -27,44 +31,54 @@ module Campus
 				return -1
 			end
 
-			if @campus.nil? then
+			if @data.nil? then
 				#エラーを起こす
 				return -1
 			end
 			
 			f = File.open(filepath,'w')
-			@campus.each{|char|
-				out = {}
-				if char['char'].match(/^[ -~｡-ﾟ]+$/) == nil then
-					out['char'] = String.new
-				else
-					out['char'] = '00'
-				end
-				out['char']  << char['char'].unpack('U*')[0].to_s(16)
+			@data.each{|line|
+				line[1].each{|char|		
+					out = {}
+					if char['char'].match(/^[ -~｡-ﾟ]+$/) == nil then
+						out['char'] = String.new
+					else
+						out['char'] = '00'
+					end
+					out['char']  << char['char'].unpack('U*')[0].to_s(16)
 
-				out['back']  = String.new
-				out['back'] << '000' << char['back'].to_s(16)
+					out['back']  = String.new
+					out['back'] << '000' << char['back'].to_s(16)
 
-				out['font']  = String.new
-				out['font'] << '000' << char['font'].to_s(16)
+					out['font']  = String.new
+					out['font'] << '000' << char['font'].to_s(16)
 
-				out['y'] = String.new
-				(4 - char['y'].to_s(16).length).times do
-					out['y'] << '0'
-				end
-				out['y'] << char['y'].to_s(16)
+					out['y'] = String.new
+					(4 - char['y'].to_s(16).length).times do
+						out['y'] << '0'
+					end
+					out['y'] << char['y'].to_s(16)
 
-				out['x'] = String.new
-				(4 - char['x'].to_s(16).length).times do
-					out['x'] << '0'
-				end
-				out['x'] << char['x'].to_s(16)
+					out['x'] = String.new
+					(4 - char['x'].to_s(16).length).times do
+						out['x'] << '0'
+					end
+					out['x'] << char['x'].to_s(16)
 			
-				f.puts out['char'] << out['back'] << out['font'] << out['y'] << out['x']
+					f.puts out['char'] << out['back'] << out['font'] << out['y'] << out['x']
 
+				}
 			}
 		end
-		
+
+		def getLine(idx)
+			if @data[idx] == nil then
+				return []
+			else
+				return @data[idx]
+			end
+		end
+		#以下要修正
 		def input(char,back,font,y,x)
 			target = search(y,x)
 			if target == -1 then 
@@ -113,6 +127,7 @@ module Campus
 			}
 		end
 		
-		attr_accessor :campus	
+		
+		attr_accessor :data
 	end
 end
