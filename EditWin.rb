@@ -3,9 +3,9 @@ require './Campus'
 
 class EditWin
 	def init(wind,filepath)
-		@window = wind.subwin(wind.maxy - 3,wind.maxx - 11,0,0)
+		@window = wind.subwin(wind.maxy - 3,wind.maxx - 11,0,11)
 		@window.box("|","-")
-		@dispWin = @window.subwin(@window.maxy - 2,@window.maxx - 2,1,1)
+		@dispWin = @window.subwin(@window.maxy - 2,@window.maxx - 2,1,12)
 		@window.scrollok(true);
 		@campus = Campus::Campus.new
 		@campus.load(filepath)
