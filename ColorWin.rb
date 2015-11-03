@@ -4,7 +4,7 @@ class CPickWin
 	def init(wind)
 		init_color
 		@window = wind.subwin(wind.maxy - 3, 15,0,0)
-
+		@window.keypad(true)
 		@select = "back"
 
 		@back = {}
@@ -27,7 +27,6 @@ class CPickWin
 		@sample[:entity].setPos(@sample[:pos][:y],@sample[:pos][:x])
 		@sample[:entity].init(@window)
 
-		display
 	end
 
 	def display()
@@ -51,7 +50,7 @@ class CPickWin
 	def selectItem()
 		while key = @window.getch do
 			case key
-			when "j","k"
+			when 259,258
 						if @select == "none" then
 							@select = "back"
 						elsif @select == "back" then
@@ -67,7 +66,7 @@ class CPickWin
 						@font[:entity].openColors
 					end
 					display
-				when "q"
+				when 27
 					@select = "none"
 					display
 					break
@@ -93,6 +92,7 @@ class BaseWin
 	def init(wind)
 		@parent = wind
 		@window = wind.subwin(@height,@width,@y,@x)
+		@window.keypad(true)
 	end
 
 	def refresh()
@@ -200,12 +200,12 @@ class Colors < BaseWin
 
 		while key = @window.getch do
 			case key
-				when "j"
+			when 258
 					if @corsor_pos < 7 then
 						@corsor_pos += 1
 						display()
 					end
-				when "k"
+				when 259
 					if @corsor_pos > 0 then
 						@corsor_pos -=1
 						display()
