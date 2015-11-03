@@ -75,6 +75,10 @@ class CPickWin
 		end
 	end
 
+	def getColor()
+		return {:back => @back[:entity].getSelect,:font => @font[:entity].getSelect,}
+	end
+
 	def init_color()
 		8.times.with_index{|i|
 			8.times.with_index{|j|
@@ -173,7 +177,7 @@ class Colors < BaseWin
 		}
 		setHW(10,5)
 		super
-		@select = 71
+		@select = 70
 		@corsor_pos = 0
 	end
 

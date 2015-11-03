@@ -1,12 +1,12 @@
 module Campus
 	class Campus
-		def load(filepath) 
+		def load(filepath)
 			@data = {}
 			keylist = ["char","back","font","y","x"]
 			f = File.open(filepath,mode = "r")
-			f.each{|line| 
+			f.each{|line|
 				obj = {}
-				line.scan(/.{1,#{4}}/).each_with_index{|a,idx| 
+				line.scan(/.{1,#{4}}/).each_with_index{|a,idx|
 					if idx == 0 then
 						str = []
 						str.push(a.hex)
@@ -24,7 +24,7 @@ module Campus
 			}
 			f.close
 		end
-	
+
 		def write(filepath,overwrite)
 			filepath << '.AE'
 			if File.exist?(filepath) && !overwrite then
@@ -35,10 +35,10 @@ module Campus
 				#エラーを起こす
 				return -1
 			end
-			
+
 			f = File.open(filepath,'w')
 			@data.each{|line|
-				line[1].each{|char|		
+				line[1].each{|char|
 					out = {}
 					if char['char'].match(/^[ -~｡-ﾟ]+$/) == nil then
 						out['char'] = String.new
@@ -64,7 +64,7 @@ module Campus
 						out['x'] << '0'
 					end
 					out['x'] << char['x'].to_s(16)
-			
+
 					f.puts out['char'] << out['back'] << out['font'] << out['y'] << out['x']
 
 				}
@@ -81,30 +81,30 @@ module Campus
 		#以下要修正
 		def input(char,back,font,y,x)
 			target = search(y,x)
-			if target == -1 then 
+			if target == -1 then
 				obj = {'char'=>char,'back'=>back,'font'=>font,'y'=>y,'x'=>x}
-				@campus.push(obj)
-				sort()
+				@data[obj['y']].push(obj)
+				#sort()
 			else
 				target['char'] = char
 				target['back'] = back
 				target['font'] = font
 			end
 		end
-		
+
 		def search(y,x)
-			@campus.each_with_index{|char,idx|
-				if char['y'] == y && char['x'] == x then
-					return @campus[idx]
+			@data[y].each_with_index{|char,idx|
+				if char['x'] == x then
+					return @data[y][idx]
 				end
 			}
 			return -1
 		end
 
 		def pop(y,x)
-			@campus.each_with_index{|char,idx|
-				if char['y'] == y && char['x'] == x then
-					@campus.delete_at(idx)
+			@data[y].each_with_index{|char,idx|
+				if char['x'] == x then
+					 @data[y].delete_at(idx)
 				end
 			}
 		end
@@ -115,7 +115,7 @@ module Campus
 			}
 			@campus.each_index{|idx|
 				a = @campus[idx]
-				if a == @campus.last then 
+				if a == @campus.last then
 					break
 				end
 				b = @campus[idx + 1]
@@ -126,8 +126,8 @@ module Campus
 				end
 			}
 		end
-		
-		
+
+
 		attr_accessor :data
 	end
 end

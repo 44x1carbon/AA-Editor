@@ -8,17 +8,17 @@ class EditWin
 		@window.scrollok(true);
 		@campus = Campus::Campus.new
 		@campus.load(filepath)
-		@corsor_y = 0
-		@corsor_x = 0
+		@disp_y = 0
+		@disp_x = 0
 	end
 
 	def display()
 		@dispWin.clear
 		@dispWin.setpos(0,0)
 		@dispWin.maxy.times.with_index{|idx|
-			@campus.getLine(idx + @corsor_y).each{|char|
-				if char['x']  >= @corsor_x && char['x']  <= @corsor_x + @dispWin.maxx then
-					@dispWin.setpos(idx,char['x'] - @corsor_x + 1)
+			@campus.getLine(idx + @disp_y).each{|char|
+				if char['x']  >= @disp_x && char['x']  <= @disp_x + @dispWin.maxx then
+					@dispWin.setpos(idx,char['x'] - @disp_x + 1)
 					back = char["back"]
 					font = char["font"]
 					@dispWin.attron(Curses::color_pair(back * 8 + font)){
@@ -32,30 +32,30 @@ class EditWin
 	end
 
 	def scrollUp(num)
-		if @corsor_y - num <= 1 then
-			@corsor_y = 0
+		if @disp_y - num <= 1 then
+			@disp_y = 0
 		else
-			@corsor_y -= num
+			@disp_y -= num
 		end
 		display()
 	end
 
 	def scrollDown(num)
-		@corsor_y += num
+		@disp_y += num
 		display()
 	end
 
 	def scrollLeft(num)
-		if @corsor_x - num <= 1 then
-			@corsor_x = 0
+		if @disp_x - num <= 1 then
+			@disp_x = 0
 		else
-			@corsor_x -= num
+			@disp_x -= num
 		end
 		display()
 	end
 
 	def scrollRight(num)
-		@corsor_x += num
+		@disp_x += num
 		display()
 	end
 
