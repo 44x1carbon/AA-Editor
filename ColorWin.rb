@@ -2,10 +2,24 @@ require 'curses'
 
 class CPickWin
 	def init(wind)
+		#color_pairの作成
 		init_color
-		@window = wind.subwin(wind.maxy - 3, 15,0,0)
+
+		#CPickWinの各パラメータ
+		@winHeight = wind.maxy - 3  #縦幅
+		@winWidth = 15							#横幅
+		@winY = 0										#Y座標
+		@winX = 0										#X座標
+
+		@window = wind.subwin(@winHeight, @winWidth,@winY,@winX)
 		@window.keypad(true)
 		@select = "back"
+
+		@sample = {}
+		@sample[:entity] = SampleWin.new
+		@sample[:pos] = {:y => 1,:x => 2}
+		@sample[:entity].setPos(@sample[:pos][:y],@sample[:pos][:x])
+		@sample[:entity].init(@window)
 
 		@back = {}
 		@back[:entity] = ColorWin.new
@@ -21,15 +35,10 @@ class CPickWin
 		@font[:entity].setText("Font")
 		@font[:entity].init(@window)
 
-		@sample = {}
-		@sample[:entity] = SampleWin.new
-		@sample[:pos] = {:y => 1,:x => 2}
-		@sample[:entity].setPos(@sample[:pos][:y],@sample[:pos][:x])
-		@sample[:entity].init(@window)
-
 	end
 
 	def display()
+		Curses::curs_set(0)
 		@window.clear
 		@sample[:entity].display(@back[:entity].getSelect,@font[:entity].getSelect)
 		@font[:entity].display
@@ -96,6 +105,7 @@ class BaseWin
 	end
 
 	def refresh()
+
 		@window.box("|","-")
 		@window.refresh
 	end
@@ -103,6 +113,14 @@ class BaseWin
 	def setHW(h,w)
 		@height = h
 		@width = w
+	end
+
+	def getH()
+		return @hright
+	end
+
+	def getW()
+		return @width
 	end
 
 	def setPos(y,x)
@@ -172,7 +190,7 @@ end
 class Colors < BaseWin
 	def init(wind)
 		@colors = [1,0,2,3,4,5,6,7]
-		8.times.with_index{|idx|
+		@colors.length.times.with_index{|idx|
 			Curses::init_pair(70 + @colors[idx],@colors[idx],@colors[idx])
 		}
 		setHW(10,5)
@@ -182,7 +200,7 @@ class Colors < BaseWin
 	end
 
 	def display()
-		8.times.with_index{|idx|
+		@colors.length.times.with_index{|idx|
 			@window.setpos(1 + idx,1)
 			@window.attron(Curses::color_pair(70 + @colors[idx])){
 				@window.addstr("  ")

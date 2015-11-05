@@ -2,7 +2,8 @@ require 'curses'
 require './Campus'
 
 class EditWin
-	def init(wind,filepath)
+	def init(wind,cpickWin,filepath)
+		@CPickWin = cpickWin
 		@window = wind.subwin(wind.maxy - 3,wind.maxx - 15,0,15)
 		@window.keypad(true)
 		@dispWin = @window.subwin(@window.maxy - 2,@window.maxx - 2,1,15)
@@ -35,6 +36,10 @@ class EditWin
 		@dispWin.refresh
 	end
 
+	def write()
+		@campus.write(true)
+	end
+
 	def scrollUp(num)
 		if @disp_y - num <= 1 then
 			@disp_y = 0
@@ -64,18 +69,21 @@ class EditWin
 	end
 
 	def getch()
+		display
 		while key = @window.getch do
 				case key
 					when 258,259,260,261
 						moveCorsor(key)
 					when 263
-						@campus.pop(@corsor_y,@corsor_x - 1)
+						@campus.pop(@corsor_y + @disp_y ,@corsor_x - 1 + @disp_x	)
 						@corsor_x -= 1
 						@window.setpos(1+@corsor_y,1+@corsor_x)
 						display
 					when 27
+						return
+					when 10
 					else
-						@campus.input(key.chr,0,0,@corsor_y,@corsor_x)
+						@campus.input(key.chr,@CPickWin.getColor()[:back],@CPickWin.getColor()[:font],@corsor_y + @disp_y,@corsor_x + @disp_x)
 						@corsor_x += 1
 						@window.setpos(1+@corsor_y,1+@corsor_x)
 						display

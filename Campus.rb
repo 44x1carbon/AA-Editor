@@ -2,6 +2,7 @@ module Campus
 	class Campus
 		def load(filepath)
 			@data = {}
+			@filepath = filepath
 			keylist = ["char","back","font","y","x"]
 			f = File.open(filepath,mode = "r")
 			f.each{|line|
@@ -25,9 +26,8 @@ module Campus
 			f.close
 		end
 
-		def write(filepath,overwrite)
-			filepath << '.AE'
-			if File.exist?(filepath) && !overwrite then
+		def write(overwrite)
+			if File.exist?(@filepath) && !overwrite then
 				return -1
 			end
 
@@ -36,7 +36,7 @@ module Campus
 				return -1
 			end
 
-			f = File.open(filepath,'w')
+			f = File.open(@filepath,'w')
 			@data.each{|line|
 				line[1].each{|char|
 					out = {}
