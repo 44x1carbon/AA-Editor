@@ -1,10 +1,15 @@
-module Campus
+
 	class Campus
 		def load(filepath)
 			@data = {}
+			@data[1] = []
 			@filepath = filepath
 			keylist = ["char","back","font","y","x"]
-			f = File.open(filepath,mode = "r")
+			if !File.exist?(@filepath)
+				f = File.open(@filepath,mode = "w+")
+			else
+				f = File.open(@filepath)
+			end
 			f.each{|line|
 				obj = {}
 				line.scan(/.{1,#{4}}/).each_with_index{|a,idx|
@@ -70,7 +75,9 @@ module Campus
 				}
 			}
 		end
-
+		def hoge()
+			p "hoge"
+		end
 		def getLine(idx)
 			if @data[idx] == nil then
 				return []
@@ -83,6 +90,9 @@ module Campus
 			target = search(y,x)
 			if target == -1 then
 				obj = {'char'=>char,'back'=>back,'font'=>font,'y'=>y,'x'=>x}
+				if @data[y].nil? then
+					@data[obj['y']] = []
+				end
 				@data[obj['y']].push(obj)
 				#sort()
 			else
@@ -93,6 +103,9 @@ module Campus
 		end
 
 		def search(y,x)
+			if @data[y].nil? then
+				return -1
+			end
 			@data[y].each_with_index{|char,idx|
 				if char['x'] == x then
 					return @data[y][idx]
@@ -109,25 +122,7 @@ module Campus
 			}
 		end
 
-		def sort() #y,xの値の小さい順にソートする
-			@campus.sort{|a,b|
-				a['y'] <=> b['y']
-			}
-			@campus.each_index{|idx|
-				a = @campus[idx]
-				if a == @campus.last then
-					break
-				end
-				b = @campus[idx + 1]
-				if a['y'] >= b['y'] && a['x'] < b['x'] then
-					work = a
-					a = b
-					b = work
-				end
-			}
-		end
 
 
 		attr_accessor :data
 	end
-end
